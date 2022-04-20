@@ -3,6 +3,7 @@ import { LockClosedIcon } from '@heroicons/react/solid'
 import Alert from "../../components/Alert/Alert";
 import axios from "axios"
 import { useHistory } from "react-router-dom";
+import Loading from "../../components/Loading/Loading";
 
 export default function Login() {
     const [username, setUsername] = useState('')
@@ -64,6 +65,7 @@ export default function Login() {
     return (
         <>
             {error && <Alert message={errorMessage} onClick={deleteMessageError}/>}
+            {loading && <Loading/>}
             <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-md w-full space-y-8">
                     <div>

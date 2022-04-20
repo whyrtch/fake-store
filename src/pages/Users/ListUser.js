@@ -78,6 +78,7 @@ export default function ListUser() {
 
     return (
         <div className="px-4 sm:px-6 lg:px-8 sm:py-6 ">
+            {loading && <Loading/>}
             <div className="sm:flex sm:items-center">
                 <div className="sm:flex-auto">
                     <h1 className="text-xl font-semibold text-gray-900">Users</h1>
@@ -129,17 +130,6 @@ export default function ListUser() {
                                 </tr>
                                 </thead>
                                 <tbody className="bg-white">
-                                {
-                                    loading && (
-
-                                        <tr>
-                                            <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                                                <Loading/>
-                                            </td>
-
-                                        </tr>
-                                    )
-                                }
                                 {sliceData.length > 0 && sliceData.map((person, personIdx) => (
                                     <tr key={person.email} className={personIdx % 2 === 0 ? undefined : 'bg-gray-50'}>
                                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{person.id}</td>
