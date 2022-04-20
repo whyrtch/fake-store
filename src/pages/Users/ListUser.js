@@ -10,12 +10,20 @@ export default function ListUser() {
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
 
+    const perPage = 3;
+    const [currentPage, setCurrentPage] = useState(1)
+    const [totalPage, setTotalPage] = useState(0)
+    const [sliceData, setSliceData] = useState([])
+
     const getData = () => {
         setLoading(true)
         axios.get('https://fakestoreapi.com/users')
             .then(r => {
                 console.log('data',r)
                 setData(r.data)
+                setCurrentPage(0)
+                setSliceData(data.slice(0, perPage))
+                setTotalPage(Math.ceil(data.length / perPage))
             })
             .catch(function (error) {
                 setData([])
@@ -45,6 +53,23 @@ export default function ListUser() {
             state: data,
         });
         history.go(0)
+    }
+
+    const onPageChange = (page) => {
+        const offset = page * perPage
+        setSliceData(data.slice(offset, offset + perPage))
+    }
+
+    const onNextPage = () => {
+        const page = currentPage + 1;
+        onPageChange(page)
+        setCurrentPage(page)
+    }
+
+    const onPrevPage = () => {
+        const page = currentPage - 1;
+        onPageChange(page)
+        setCurrentPage(page)
     }
 
     useEffect(() => {
@@ -115,7 +140,7 @@ export default function ListUser() {
                                         </tr>
                                     )
                                 }
-                                {data.length > 0 && data.map((person, personIdx) => (
+                                {sliceData.length > 0 && sliceData.map((person, personIdx) => (
                                     <tr key={person.email} className={personIdx % 2 === 0 ? undefined : 'bg-gray-50'}>
                                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{person.id}</td>
                                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{person.username}</td>
@@ -126,7 +151,7 @@ export default function ListUser() {
                                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{person.email}</td>
                                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{person.address.city + ', ' + person.address.street + ' no ' + person.address.number}</td>
                                         <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                            <button onClick={() => onEditUser(person)} className="text-indigo-600 hover:text-indigo-900 sm:mr-6">
+                                            <button onClick={() => onEditUser(person)} className="text-indigo-600 hover:text-indigo-900 mr-6">
                                                 Edit
                                             </button>
                                             <button onClick={() => onDeleteUser(person.id)} className="text-red-600 hover:text-red-900">
@@ -140,7 +165,14 @@ export default function ListUser() {
                         </div>
                     </div>
                 </div>
-                <Pagination total={data.length} element={data.length}/>
+                <Pagination
+                    total={data.length} perPage={perPage}
+                    totalPage={totalPage}
+                    totalElement={sliceData.length}
+                    currentPage={currentPage}
+                    nextPage={onNextPage}
+                    prevPage={onPrevPage}
+                />
             </div>
         </div>
     )
