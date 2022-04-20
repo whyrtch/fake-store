@@ -1,6 +1,9 @@
-import React from 'react';
+const Loading = ({show}) => {
 
-const Loading = () => {
+    if (!show) {
+        return  null
+    }
+
     return (
         <div className="w-full h-full fixed block top-0 left-0 bg-white opacity-75 z-50">
             <div className="h-screen flex justify-center justify-items-center items-center">

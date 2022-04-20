@@ -1,9 +1,8 @@
 import React, {useEffect, useState} from "react";
 import { LockClosedIcon } from '@heroicons/react/solid'
-import Alert from "../../components/Alert/Alert";
 import axios from "axios"
 import { useHistory } from "react-router-dom";
-import Loading from "../../components/Loading/Loading";
+import Modal from "../../components/Modal/Modal";
 
 export default function Login() {
     const [username, setUsername] = useState('')
@@ -37,10 +36,10 @@ export default function Login() {
                 .catch(function (error) {
                     setError(true)
                     setErrorMessage(error.response.data)
-                    localStorage.setItem("token", null)
+                    localStorage.clear()
                 })
                 .finally(() => {
-                setLoading(false)
+                    setLoading(false)
                 })
 
 
@@ -56,7 +55,7 @@ export default function Login() {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        if (token) {
+        if (token !== null) {
             history.push("/users");
             history.go(0)
         }
@@ -64,8 +63,6 @@ export default function Login() {
 
     return (
         <>
-            {error && <Alert message={errorMessage} onClick={deleteMessageError}/>}
-            {loading && <Loading/>}
             <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-md w-full space-y-8">
                     <div>
@@ -152,6 +149,7 @@ export default function Login() {
                     </form>
                 </div>
             </div>
+            <Modal message={errorMessage} type="negative" onClose={deleteMessageError} show={error}/>
         </>
     )
 }

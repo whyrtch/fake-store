@@ -8,7 +8,7 @@ export default function Pagination(props) {
 
     return (
         <nav
-            className="bg-white py-3 flex items-center justify-between border-t border-gray-200"
+            className="py-3 flex items-center justify-between border-t border-gray-200"
             aria-label="Pagination"
         >
             <div className="hidden sm:block">

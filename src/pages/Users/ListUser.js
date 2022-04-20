@@ -55,6 +55,14 @@ export default function ListUser() {
         history.go(0)
     }
 
+    const onDetailUser = (data) => {
+        history.push({
+            pathname: "/detail-user",
+            state: data,
+        });
+        history.go(0)
+    }
+
     const onPageChange = (page) => {
         const offset = page * perPage
         setSliceData(data.slice(offset, offset + perPage))
@@ -74,11 +82,22 @@ export default function ListUser() {
 
     useEffect(() => {
         getData()
-    },[data.length === 0])
+    }, [data.length === 0])
 
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            history.push("/");
+            history.go(0)
+        }
+    },[])
+
+    useEffect(() => {
+
+    },[])
+    
     return (
         <div className="px-4 sm:px-6 lg:px-8 sm:py-6 ">
-            {loading && <Loading/>}
             <div className="sm:flex sm:items-center">
                 <div className="sm:flex-auto">
                     <h1 className="text-xl font-semibold text-gray-900">Users</h1>
@@ -116,13 +135,7 @@ export default function ListUser() {
                                         Name
                                     </th>
                                     <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                        Phone
-                                    </th>
-                                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                                         Email
-                                    </th>
-                                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                        Address
                                     </th>
                                     <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
                                         <span className="sr-only">Edit</span>
@@ -137,11 +150,12 @@ export default function ListUser() {
                                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                             {person.name.firstname + ' ' + person.name.lastname}
                                         </td>
-                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{person.phone}</td>
                                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{person.email}</td>
-                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{person.address.city + ', ' + person.address.street + ' no ' + person.address.number}</td>
                                         <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                            <button onClick={() => onEditUser(person)} className="text-indigo-600 hover:text-indigo-900 mr-6">
+                                            <button onClick={() => onDetailUser(person)} className="text-indigo-600 hover:text-indigo-900">
+                                                Detail
+                                            </button>
+                                            <button onClick={() => onEditUser(person)} className="text-amber-600 hover:text-amber-900 mx-6">
                                                 Edit
                                             </button>
                                             <button onClick={() => onDeleteUser(person.id)} className="text-red-600 hover:text-red-900">
@@ -164,6 +178,7 @@ export default function ListUser() {
                     prevPage={onPrevPage}
                 />
             </div>
+            <Loading show={loading}/>
         </div>
     )
 }
