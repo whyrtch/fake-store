@@ -2,7 +2,8 @@
 import React, {useEffect, useState} from 'react'
 import axios from "axios";
 import Loading from "../../components/Loading/Loading";
-import {Redirect, useHistory} from "react-router-dom";
+import {useHistory} from "react-router-dom";
+import Pagination from "../../components/Pagination/Pagination";
 
 export default function ListUser() {
     const history = useHistory();
@@ -27,9 +28,8 @@ export default function ListUser() {
         setLoading(true)
         axios.delete(`https://fakestoreapi.com/users/${id}`)
             .then(r => {
-                console.log('delete success',r)
-                const updatedData = data;
-                const newData = updatedData.filter(d => d.id !== id);
+                console.debug('delete success',r)
+                const newData = data.filter(d => d.id !== id);
                 setData(newData)
             })
             .catch(function (error) {
@@ -140,6 +140,7 @@ export default function ListUser() {
                         </div>
                     </div>
                 </div>
+                <Pagination total={data.length} element={data.length}/>
             </div>
         </div>
     )
