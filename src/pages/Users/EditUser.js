@@ -15,7 +15,7 @@ export default function EditUser() {
     const [street, setStreet] = useState('')
     const [number, setNumber] = useState(0)
     const [code, setCode] = useState(0)
-    const [password, setPassword] = useState('')
+    const [password, ] = useState('')
     const [error, setError] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
     const location = useLocation()
